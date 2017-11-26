@@ -25,6 +25,7 @@ withCli(main, `
     --frame, -f     wether to frame the result with an application window [boolean]
     --width, -w     width in columns [number]
     --height, -h    height in lines [number]
+    --help          print this help [boolean]
 
   Examples
     $ echo rec.json | svg-term
@@ -62,11 +63,13 @@ async function getInput(cli: SvgTermCli) {
 function withCli(fn: (cli: SvgTermCli) => Promise<void>, help: string = ''): Promise<void> {
   return main(meow(help))
     .catch(err => {
-      if (typeof err.help === 'function') {
-        console.log(err.help());
-        console.log('\n', err.message);
-        process.exit(1);
-      }
-      throw err;
+      setTimeout(() => {
+        if (typeof err.help === 'function') {
+          console.log(err.help());
+          console.log('\n', err.message);
+          process.exit(1);
+        }
+        throw err;
+      }, 0);
     });
 }

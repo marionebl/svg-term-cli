@@ -6,6 +6,12 @@
   version "0.5.1-0"
   resolved "https://registry.yarnpkg.com/@marionebl/is/-/is-0.5.1-0.tgz#a7b1ef5210068b660ed08fa73557e6ab7d7cc491"
 
+"@types/execa@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@types/execa/-/execa-0.8.0.tgz#2c717dbcb4a593e31c3b1d40180a0926f77f5355"
+  dependencies:
+    "@types/node" "*"
+
 "@types/glob@*":
   version "5.0.33"
   resolved "https://registry.yarnpkg.com/@types/glob/-/glob-5.0.33.tgz#3dff7c6ce09d65abe919c7961dc3dee016f36ad7"
@@ -26,6 +32,10 @@
 "@types/jest@^21.1.5":
   version "21.1.6"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.6.tgz#9467945ce33261e4fdd14276576951aa130515aa"
+
+"@types/jest@^21.1.8":
+  version "21.1.8"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-21.1.8.tgz#d497213725684f1e5a37900b17a47c9c018f1a97"
 
 "@types/lodash@^4.14.84":
   version "4.14.85"

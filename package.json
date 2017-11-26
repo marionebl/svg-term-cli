@@ -7,6 +7,22 @@
     "test": "jest",
     "build": "tsc"
   },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": ".*\\.test.ts"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marionebl/svg-term-cli.git"
@@ -23,12 +39,15 @@
   },
   "homepage": "https://github.com/marionebl/svg-term-cli#readme",
   "dependencies": {
+    "@types/execa": "^0.8.0",
+    "@types/jest": "^21.1.8",
     "@types/meow": "^3.6.2",
     "get-stdin": "^5.0.1",
     "meow": "^3.7.0",
     "node-fetch": "^1.7.3",
     "svg-term": "^1.0.0",
-    "term-schemes": "^1.0.0"
+    "term-schemes": "^1.0.0",
+    "ts-jest": "^21.2.3"
   },
   "devDependencies": {
     "execa": "^0.8.0",
