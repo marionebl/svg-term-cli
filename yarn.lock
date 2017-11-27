@@ -2838,9 +2838,9 @@ supports-color@^4.0.0:
   dependencies:
     has-flag "^2.0.0"
 
-svg-term@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/svg-term/-/svg-term-1.0.0.tgz#1fbee70b1d280f283aa27fa0346bb8573b5910ff"
+svg-term@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/svg-term/-/svg-term-1.0.1.tgz#531ac1977eb49bf7337102e2259a5a51a23a4ecc"
   dependencies:
     ansi-to-rgb "^1.0.0"
     headless-terminal "^0.4.0"

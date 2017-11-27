@@ -28,3 +28,8 @@ test('prints version with zero exit code for --version', async () => {
   expect(result.code).toBe(0);
   expect(result.stdout).toBe(pkg.version);
 });
+
+test('works for minimal stdin input', async () => {
+  const result = await bin([], {input: '[{"version": 2, "width": 1, "height": 1}, [1, "o", "foo"]]'});
+  expect(result.code).toBe(0);
+});

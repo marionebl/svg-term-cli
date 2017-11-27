@@ -45,7 +45,7 @@
     "get-stdin": "^5.0.1",
     "meow": "^3.7.0",
     "node-fetch": "^1.7.3",
-    "svg-term": "^1.0.0",
+    "svg-term": "^1.0.1",
     "term-schemes": "^1.0.0",
     "ts-jest": "^21.2.3"
   },

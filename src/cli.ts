@@ -3,6 +3,7 @@ import * as meow from 'meow';
 
 const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
+const {render} = require('svg-term');
 
 interface SvgTermCli {
   flags: { [name: string]: any };
@@ -40,6 +41,9 @@ async function main(cli: SvgTermCli) {
   if (!input) {
     throw error(`svg-term: either stdin or --cast are required`);
   }
+
+  const svg = render(input);
+  console.log(svg);
 }
 
 function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
