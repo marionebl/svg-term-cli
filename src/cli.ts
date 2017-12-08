@@ -35,15 +35,38 @@ withCli(main, `
 `);
 
 async function main(cli: SvgTermCli) {
-  const input = await getStdin(cli);
+  const input = await getInput(cli);
   const error = cliError(cli);
 
   if (!input) {
     throw error(`svg-term: either stdin or --cast are required`);
   }
 
-  const svg = render(input);
+  const malformed = ensure(['height', 'width'], cli.flags, (name, val) => {
+    if (!(name in cli.flags)) {
+      return;
+    }
+    const candidate = parseInt(val, 10);
+    if (isNaN(candidate)) {
+      return new TypeError(`${name} was expected to be number, received "${val}"`);
+    }
+  });
+
+  if (malformed.length > 0) {
+    throw error(`svg-term: ${malformed.map(m => m.message).join('\n')}`);
+  }
+
+  const svg = render(input, {
+    height: toNumber(cli.flags.height),
+    width: toNumber(cli.flags.width),
+    window: Boolean(cli.flags.frame)
+  });
+
   console.log(svg);
+}
+
+function ensure(names: string[], flags: SvgTermCli['flags'], predicate: (name: string, val: any) => Error | null): Error[] {
+  return names.map(name => predicate(name, flags[name])).filter(e => e instanceof Error);
 }
 
 function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
@@ -56,12 +79,22 @@ function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
 
 async function getInput(cli: SvgTermCli) {
   if (cli.flags.cast) {
-    const id = cli.input[0];
-    const response = await fetch(`https://asciinema.org/a/${id}.cast?dl=true`);
+    const response = await fetch(`https://asciinema.org/a/${cli.flags.cast}.cast?dl=true`);
     return response.text();
   }
 
   return await getStdin();  
+}
+
+function toNumber(input: string | null): number | null {
+  if (!input) {
+    return null;
+  }
+  const candidate = parseInt(input, 10);
+  if (isNaN(candidate)) {
+    return null;
+  }
+  return candidate;
 }
 
 function withCli(fn: (cli: SvgTermCli) => Promise<void>, help: string = ''): Promise<void> {
