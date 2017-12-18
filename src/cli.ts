@@ -8,6 +8,7 @@ import {TermSchemes, TermScheme} from 'term-schemes';
 const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
 const {render} = require('svg-term');
+const sander = require('@marionebl/sander');
 
 interface SvgTermCli {
   flags: { [name: string]: any };
@@ -25,6 +26,7 @@ withCli(main, `
 
   Options
     --cast, -c      asciinema cast id to download [string], required if no stdin provided
+    --out, -o       output file, emits to stdout if omitted
     --profile, -p   terminal profile file to use [file], requires --term
     --term, -t      terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
     --frame, -f     wether to frame the result with an application window [boolean]
@@ -98,7 +100,11 @@ async function main(cli: SvgTermCli) {
     window: Boolean(cli.flags.frame)
   });
 
-  console.log(svg);
+  if ('out' in cli.flags) {
+    sander.writeFile(cli.flags.out, Buffer.from(svg));
+  } else {
+    process.stdout.write(svg);
+  }
 }
 
 function ensure(names: string[], flags: SvgTermCli['flags'], predicate: (name: string, val: any) => Error | null): Error[] {
