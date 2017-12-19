@@ -2,11 +2,13 @@
   <img width="600" height="370" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1bb61eca/examples/parrot.svg">
 </p>
 
+> Share terminal sessions as razor-sharp animated SVG everywhere
+
 # svg-term-cli
 
 * 💄 Render asciicast to animated SVG
-* 🌐 Use asciicast from disk or asciinema.com
-* 🤖 Pick up iterm2 and Terminal color scheme automatically
+* 🌐 Share asciicasts everywhere (sans JS)
+* 🤖 
 
 ## Install
 
@@ -45,9 +47,11 @@ Usage
     $ svg-term --cast 113643
 ```
 
-## Why?
+## Rationale
 
-The case is to use SVGs in READMEs instead of GIFs. The image above at the top of this README is an example. See how sharp the text looks, even when you zoom in? That’s because it’s an SVG!
+Replace GIF asciicast recordings where you can not use the [asciinema player](https://asciinema.org/), e.g. `README.md` files on GitHub and the npm registry.
+
+The image at the top of this README is an example. See how sharp the text looks, even when you zoom in? That’s because it’s an SVG!
 
 ## License
 
