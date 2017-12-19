@@ -47,8 +47,9 @@ withCli(main, `
     --help          print this help [boolean]
 
   Examples
-    $ echo rec.json | svg-term
-    $ svg-term --cast 113643
+    $ echo rec.json | svg-term 
+    $ svg-term --cast 113643 
+    $ svg-term --cast 113643 --out examples/parrot.svg
 `);
 
 async function main(cli: SvgTermCli) {
@@ -71,6 +72,19 @@ async function main(cli: SvgTermCli) {
 
   if (malformed.length > 0) {
     throw error(`svg-term: ${malformed.map(m => m.message).join('\n')}`);
+  }
+
+  const missingValue = ensure(['cast', 'out', 'profile'], cli.flags, (name, val) => {
+    if (!(name in cli.flags)) {
+      return;
+    }
+    if (typeof val !== 'string') {
+      return new TypeError(`${name} expected to be string, received "${val}"`);
+    }
+  });
+
+  if (missingValue.length > 0) {
+    throw error(`svg-term: ${missingValue.map(m => m.message).join('\n')}`);
   }
 
   const term = guessTerminal() || cli.flags.term;
@@ -121,7 +135,7 @@ async function main(cli: SvgTermCli) {
     window: Boolean(cli.flags.frame)
   });
 
-  if ('out' in cli.flags) {
+  if (typeof cli.flags.out === 'string') {
     sander.writeFile(cli.flags.out, Buffer.from(svg));
   } else {
     process.stdout.write(svg);
