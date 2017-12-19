@@ -1,8 +1,12 @@
 # svg-term-cli
 
-* Render asciinema asciicast to aimated SVG
-* Fetch asciicast from disk or asciinema.com
-* Share your terminal sessions everywhere
+* Render asciicast to animated SVG
+* Use asciicast from disk or asciinema.com
+* Pick up iterm2 and Terminal color scheme automatically
+
+<p align="center">
+  <img width="460" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1bb61eca/examples/parrot.svg">
+</p>
 
 ## Usage
 
