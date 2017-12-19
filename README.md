@@ -16,6 +16,8 @@ Generate the `parrot.svg` example from [asciicast](https://asciinema.org/a/11364
 svg-term --cast=113643 --out examples/parrot.svg --frame
 ```
 
+## Interface
+
 ```
 $ svg-term --help
 
