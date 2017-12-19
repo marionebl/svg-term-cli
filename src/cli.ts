@@ -1,14 +1,26 @@
 #!/usr/bin/env node
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 import * as meow from 'meow';
 import * as parsers from 'term-schemes';
 import {TermSchemes, TermScheme} from 'term-schemes';
 
+const plist = require('plist');
+const bplistParser = require('bplist-parser');
 const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
 const {render} = require('svg-term');
 const sander = require('@marionebl/sander');
+
+enum DetectableTerminals {
+  iterm2 = 'iterm2',
+  terminal = 'terminal'
+};
+
+interface Guesses {
+  [key: string]: string | null;
+}
 
 interface SvgTermCli {
   flags: { [name: string]: any };
@@ -25,18 +37,17 @@ withCli(main, `
     $ svg-term [options]
 
   Options
-    --cast, -c      asciinema cast id to download [string], required if no stdin provided
-    --out, -o       output file, emits to stdout if omitted
-    --profile, -p   terminal profile file to use [file], requires --term
-    --term, -t      terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
-    --frame, -f     wether to frame the result with an application window [boolean]
-    --width, -w     width in columns [number]
-    --height, -h    height in lines [number]
+    --cast          asciinema cast id to download [string], required if no stdin provided
+    --out           output file, emits to stdout if omitted
+    --profile       terminal profile file to use [file], requires --term
+    --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
+    --frame         wether to frame the result with an application window [boolean]
+    --width         width in columns [number]
+    --height        height in lines [number]
     --help          print this help [boolean]
 
   Examples
     $ echo rec.json | svg-term
-    $ svg-term --cast 113643
     $ svg-term --cast 113643
 `);
 
@@ -62,8 +73,17 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${malformed.map(m => m.message).join('\n')}`);
   }
 
+  const term = guessTerminal() || cli.flags.term;
+  const profile = term ? guessProfile(term) || cli.flags.profile : cli.flags.profile;
+
+  const guess: Guesses = {
+    term,
+    profile
+  };
+
   if (('term' in cli.flags) || ('profile' in cli.flags)) {
-    const unsatisfied = ['term', 'profile'].filter(n => typeof cli.flags[n] !== 'string');
+    const unsatisfied = ['term', 'profile'].filter(n => !Boolean(guess[n]));
+
     if (unsatisfied.length > 0) {
       throw error(`svg-term: --term and --profile must be used together, ${unsatisfied.join(', ')} missing`);
     }
@@ -82,16 +102,17 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${unknown.map(m => m.message).join('\n')}`);
   }
 
-  if ('profile' in cli.flags) {
+  const p = guess.profile || '';
+  const isFileProfile = ['~', '/', '.'].indexOf(p.charAt(0)) > -1;
+
+  if (isFileProfile && 'profile' in cli.flags) {
     const missing = !fs.existsSync(path.join(process.cwd(), cli.flags.profile));
     if (missing) {
       throw error(`svg-term: ${cli.flags.profile} must be readable file but was not found`);
     }
   }
 
-  const theme = (('term' in cli.flags) && ('profile' in cli.flags)) 
-    ? parse(cli.flags.term, cli.flags.profile) 
-    : null;
+  const theme = getTheme(guess);
 
   const svg = render(input, {
     height: toNumber(cli.flags.height),
@@ -117,6 +138,74 @@ function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
     err.help = () => cli.help; 
     return err;
   };
+}
+
+function getConfig(term: DetectableTerminals): any {
+  switch(term) {
+    case DetectableTerminals.terminal: {
+      const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.apple.terminal.plist`);
+      return bplistParser.parseBuffer(file)[0];
+    }
+    case DetectableTerminals.iterm2: {
+      const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.googlecode.iterm2.plist`);
+      return bplistParser.parseBuffer(file)[0];
+    }
+    default:
+      return null;
+  }
+}
+
+function getPresets(term: DetectableTerminals): any {
+  const config = getConfig(term);
+
+  switch(term) {
+    case DetectableTerminals.terminal: {
+      return config['Window Settings'];
+    }
+    case DetectableTerminals.iterm2: {
+      return config['Custom Color Presets'];
+    }
+    default:
+      return null;
+  }
+}
+
+function guessProfile(term: DetectableTerminals): string | null {
+  if (os.platform() !== 'darwin') {
+    return null;
+  }
+
+  const config = getConfig(term);
+
+  if (!config) {
+    return null;
+  }
+
+  switch(term) {
+    case DetectableTerminals.terminal: {
+      return config['Default Window Settings'];
+    }
+    case DetectableTerminals.iterm2: {
+      const presets = config['Custom Color Presets'];
+    }
+    default:
+      return null;
+  }
+}
+
+function guessTerminal(): DetectableTerminals | null {
+  if (os.platform() !== 'darwin') {
+    return;
+  }
+
+  switch(process.env.TERM_PROGRAM) {
+    case 'iTerm.app':
+      return DetectableTerminals.iterm2;
+    case 'Apple_Terminal':
+      return DetectableTerminals.terminal;
+    default:
+      return null;
+  }
 }
 
 async function getInput(cli: SvgTermCli) {
@@ -155,9 +244,50 @@ function getParser(term: string) {
   }
 }
 
-function parse(term: string, input: string): TermScheme {
+function getTheme(guess: Guesses): TermScheme | null {
+  if (guess.term === null || guess.profile === null) {
+    return null;
+  }
+  
+  const p = guess.profile || '';
+  const isFileProfile = ['~', '/', '.'].indexOf(p.charAt(0)) > -1;
+
+  return isFileProfile 
+    ? parseTheme(guess.term, guess.profile) 
+    : extractTheme(guess.term, guess.profile);
+}
+
+function parseTheme(term: string, input: string): TermScheme {
   const parser = getParser(term);
   return parser(String(fs.readFileSync(input)));
+}
+
+function extractTheme(term: string, name: string): TermScheme | null {
+  if (!(term in DetectableTerminals)) {
+    return null;
+  }
+
+  if (os.platform() !== 'darwin') {
+    return null;
+  }
+
+  const presets = getPresets(term as DetectableTerminals);
+  const theme = presets[name];
+  const parser = getParser(term);
+
+  if (!theme) {
+    return null;
+  }
+
+  switch (term) {
+    case DetectableTerminals.iterm2: {
+      return parser(plist.build(theme));
+    }
+    case DetectableTerminals.terminal:
+      return parser(plist.build(theme));
+    default:
+      return null;
+  }
 }
 
 function toNumber(input: string | null): number | null {
