@@ -1,12 +1,12 @@
+<p align="center">
+  <img width="600" height="370" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1bb61eca/examples/parrot.svg">
+</p>
+
 # svg-term-cli
 
 * Render asciicast to animated SVG
 * Use asciicast from disk or asciinema.com
 * Pick up iterm2 and Terminal color scheme automatically
-
-<p align="center">
-  <img width="460" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1bb61eca/examples/parrot.svg">
-</p>
 
 ## Usage
 
