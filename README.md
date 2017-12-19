@@ -53,6 +53,13 @@ Replace GIF asciicast recordings where you can not use the [asciinema player](ht
 
 The image at the top of this README is an example. See how sharp the text looks, even when you zoom in? That’s because it’s an SVG!
 
+## Related
+
+* [asciinema/asciinema](https://github.com/asciinema/asciinema) - Terminal session recorder
+* [derhuerst/asciicast-to-svg](https://github.com/derhuerst/asciicast-to-svg) - Render frames of Asciicasts as SVGs
+* [marionebl/svg-term](https://github.com/marionebl/svg-term) - Render asciicast to animated SVG
+* [marionebl/term-schemes](https://github.com/marionebl/term-schemes) - Parse and normalize common terminal emulator color schemes
+
 ## License
 
 Copyright 2017. Released under the MIT license.
