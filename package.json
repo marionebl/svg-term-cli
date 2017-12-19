@@ -2,7 +2,9 @@
   "name": "svg-term-cli",
   "version": "1.0.1",
   "description": "Share terminal sessions via SVG and CSS",
-  "bin": "./lib/cli.js",
+  "bin": {
+    "svg-term": "./lib/cli.js"
+  },
   "files": [
     "lib"
   ],
