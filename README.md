@@ -8,6 +8,12 @@
 * 🌐 Use asciicast from disk or asciinema.com
 * 🤖 Pick up iterm2 and Terminal color scheme automatically
 
+## Install
+
+```
+npm install -g svg-term-cli
+```
+
 ## Usage
 
 Generate the `parrot.svg` example from [asciicast](https://asciinema.org/a/113643)
@@ -42,4 +48,3 @@ Usage
 ## License
 
 Copyright 2017. Released under the MIT license.
-
