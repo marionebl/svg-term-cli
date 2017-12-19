@@ -45,6 +45,10 @@ Usage
     $ svg-term --cast 113643
 ```
 
+## Why?
+
+The case is to use SVGs in READMEs instead of GIFs. The image above at the top of this README is an example. See how sharp the text looks, even when you zoom in? That’s because it’s an SVG!
+
 ## License
 
 Copyright 2017. Released under the MIT license.
