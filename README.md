@@ -8,7 +8,7 @@
 
 * 💄 Render asciicast to animated SVG
 * 🌐 Share asciicasts everywhere (sans JS)
-* 🤖 
+* 🤖 Style with common [color profiles](https://github.com/marionebl/term-schemes#supported-formats)
 
 ## Install
 
