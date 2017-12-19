@@ -4,9 +4,9 @@
 
 # svg-term-cli
 
-* Render asciicast to animated SVG
-* Use asciicast from disk or asciinema.com
-* Pick up iterm2 and Terminal color scheme automatically
+* 💄 Render asciicast to animated SVG
+* 🌐 Use asciicast from disk or asciinema.com
+* 🤖 Pick up iterm2 and Terminal color scheme automatically
 
 ## Usage
 
