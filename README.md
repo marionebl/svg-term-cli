@@ -38,3 +38,8 @@ Usage
     $ echo rec.json | svg-term
     $ svg-term --cast 113643
 ```
+
+## License
+
+Copyright 2017. Released under the MIT license.
+
