@@ -78,6 +78,9 @@ async function main(cli: SvgTermCli) {
     if (!(name in cli.flags)) {
       return;
     }
+    if (name === 'cast' && typeof val === 'number') {
+      return;
+    }
     if (typeof val !== 'string') {
       return new TypeError(`${name} expected to be string, received "${val}"`);
     }
