@@ -60,6 +60,12 @@ The image at the top of this README is an example. See how sharp the text looks,
 * [marionebl/svg-term](https://github.com/marionebl/svg-term) - Render asciicast to animated SVG
 * [marionebl/term-schemes](https://github.com/marionebl/term-schemes) - Parse and normalize common terminal emulator color schemes
 
+## Gallery
+
+* [marionebl/commitlint](https://github.com/marionebl/commitlint)
+* [marionebl/share-cli](https://github.com/marionebl/share-cli)
+* [marionebl/remote-share-cli](https://github.com/marionebl/remote-share-cli)
+
 ## License
 
 Copyright 2017. Released under the MIT license.
