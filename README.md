@@ -40,6 +40,9 @@ Usage
     --profile       terminal profile file to use [file], requires --term
     --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
     --frame         wether to frame the result with an application window [boolean]
+    --from          lower range of timeline to render in ms [number]
+    --to            upper range of timeline to render in ms [number]
+    --at            timestamp of frame to render in ms [number]
     --width         width in columns [number]
     --height        height in lines [number]
     --help          print this help [boolean]
@@ -47,6 +50,8 @@ Usage
   Examples
     $ echo rec.json | svg-term
     $ svg-term --cast 113643
+    $ svg-term --cast 3 --from 4000 --to 6000 --out nyan.svg
+    $ svg-term --cast rfS1M5ynKm1hGaBqJYJj0mGCi --at 40000 --out jsvu.svg
 ```
 
 ## Rationale

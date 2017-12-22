@@ -53,7 +53,7 @@
     "meow": "^3.7.0",
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",
-    "svg-term": "^1.0.4",
+    "svg-term": "1.1.0",
     "term-schemes": "^1.0.1",
     "ts-jest": "^21.2.3"
   },

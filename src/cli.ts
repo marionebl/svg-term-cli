@@ -44,6 +44,9 @@ withCli(main, `
     --frame         wether to frame the result with an application window [boolean]
     --width         width in columns [number]
     --height        height in lines [number]
+    --from          lower range of timeline to render in ms [number]
+    --to            upper range of timeline to render in ms [number]
+    --at            timestamp of frame to render in ms [number]
     --help          print this help [boolean]
 
   Examples
@@ -90,6 +93,22 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${missingValue.map(m => m.message).join('\n')}`);
   }
 
+  const shadowed = ensure(['at', 'from', 'to'], cli.flags, (name, val) => {
+    if (!(name in cli.flags)) {
+      return;
+    }
+    if (typeof val !== 'number' || isNaN(val)) {
+      return new TypeError(`${name} expected to be number, received "${val}"`);
+    }
+    if (name !== 'at' && typeof cli.flags.at === 'number') {
+      return new TypeError(`--at flag disallows --${name}`);
+    }
+  });
+
+  if (shadowed.length > 0) {
+    throw error(`svg-term: ${shadowed.map(m => m.message).join('\n')}`);
+  }
+
   const term = guessTerminal() || cli.flags.term;
   const profile = term ? guessProfile(term) || cli.flags.profile : cli.flags.profile;
 
@@ -132,6 +151,9 @@ async function main(cli: SvgTermCli) {
   const theme = getTheme(guess);
 
   const svg = render(input, {
+    at: toNumber(cli.flags.at),
+    from: toNumber(cli.flags.from),
+    to: toNumber(cli.flags.to),
     height: toNumber(cli.flags.height),
     theme,
     width: toNumber(cli.flags.width),
