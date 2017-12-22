@@ -1,8 +1,10 @@
+> Share terminal sessions as razor-sharp animated SVG everywhere
+
 <p align="center">
-  <img width="600" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1bb61eca/examples/parrot.svg">
+  <img width="600" src="https://cdn.rawgit.com/marionebl/svg-term-cli/311810a5bae2639eaf815555f2fe1b7d725d952a/examples/parrot.svg">
 </p>
 
-> Share terminal sessions as razor-sharp animated SVG everywhere
+> Example generated with `svg-term --cast 113643 --out examples/parrot.svg --frame`
 
 # svg-term-cli
 
