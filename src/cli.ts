@@ -2,6 +2,7 @@
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import {guessTerminal, GuessedTerminal} from 'guess-terminal';
 import * as meow from 'meow';
 import * as parsers from 'term-schemes';
 import {TermSchemes, TermScheme} from 'term-schemes';
@@ -12,11 +13,6 @@ const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
 const {render} = require('svg-term');
 const sander = require('@marionebl/sander');
-
-enum DetectableTerminals {
-  iterm2 = 'iterm2',
-  terminal = 'terminal'
-};
 
 interface Guesses {
   [key: string]: string | null;
@@ -179,13 +175,13 @@ function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
   };
 }
 
-function getConfig(term: DetectableTerminals): any {
+function getConfig(term: GuessedTerminal): any {
   switch(term) {
-    case DetectableTerminals.terminal: {
+    case GuessedTerminal.terminal: {
       const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.apple.terminal.plist`);
       return bplistParser.parseBuffer(file)[0];
     }
-    case DetectableTerminals.iterm2: {
+    case GuessedTerminal.iterm2: {
       const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.googlecode.iterm2.plist`);
       return bplistParser.parseBuffer(file)[0];
     }
@@ -194,14 +190,14 @@ function getConfig(term: DetectableTerminals): any {
   }
 }
 
-function getPresets(term: DetectableTerminals): any {
+function getPresets(term: GuessedTerminal): any {
   const config = getConfig(term);
 
   switch(term) {
-    case DetectableTerminals.terminal: {
+    case GuessedTerminal.terminal: {
       return config['Window Settings'];
     }
-    case DetectableTerminals.iterm2: {
+    case GuessedTerminal.iterm2: {
       return config['Custom Color Presets'];
     }
     default:
@@ -209,7 +205,7 @@ function getPresets(term: DetectableTerminals): any {
   }
 }
 
-function guessProfile(term: DetectableTerminals): string | null {
+function guessProfile(term: GuessedTerminal): string | null {
   if (os.platform() !== 'darwin') {
     return null;
   }
@@ -221,27 +217,12 @@ function guessProfile(term: DetectableTerminals): string | null {
   }
 
   switch(term) {
-    case DetectableTerminals.terminal: {
+    case GuessedTerminal.terminal: {
       return config['Default Window Settings'];
     }
-    case DetectableTerminals.iterm2: {
+    case GuessedTerminal.iterm2: {
       const presets = config['Custom Color Presets'];
     }
-    default:
-      return null;
-  }
-}
-
-function guessTerminal(): DetectableTerminals | null {
-  if (os.platform() !== 'darwin') {
-    return;
-  }
-
-  switch(process.env.TERM_PROGRAM) {
-    case 'iTerm.app':
-      return DetectableTerminals.iterm2;
-    case 'Apple_Terminal':
-      return DetectableTerminals.terminal;
     default:
       return null;
   }
@@ -302,7 +283,7 @@ function parseTheme(term: string, input: string): TermScheme {
 }
 
 function extractTheme(term: string, name: string): TermScheme | null {
-  if (!(term in DetectableTerminals)) {
+  if (!(term in GuessedTerminal)) {
     return null;
   }
 
@@ -310,7 +291,7 @@ function extractTheme(term: string, name: string): TermScheme | null {
     return null;
   }
 
-  const presets = getPresets(term as DetectableTerminals);
+  const presets = getPresets(term as GuessedTerminal);
   const theme = presets[name];
   const parser = getParser(term);
 
@@ -319,10 +300,10 @@ function extractTheme(term: string, name: string): TermScheme | null {
   }
 
   switch (term) {
-    case DetectableTerminals.iterm2: {
+    case GuessedTerminal.iterm2: {
       return parser(plist.build(theme));
     }
-    case DetectableTerminals.terminal:
+    case GuessedTerminal.terminal:
       return parser(plist.build(theme));
     default:
       return null;

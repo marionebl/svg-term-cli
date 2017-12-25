@@ -45,22 +45,23 @@
   "homepage": "https://github.com/marionebl/svg-term-cli#readme",
   "dependencies": {
     "@marionebl/sander": "^0.6.1",
-    "@types/execa": "^0.8.0",
-    "@types/jest": "^21.1.8",
-    "@types/meow": "^3.6.2",
     "bplist-parser": "^0.1.1",
     "get-stdin": "^5.0.1",
+    "guess-terminal": "^1.0.0",
     "meow": "^3.7.0",
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",
     "svg-term": "1.1.0",
-    "term-schemes": "^1.0.1",
-    "ts-jest": "^21.2.3"
+    "term-schemes": "^1.0.1"
   },
   "devDependencies": {
+    "@types/execa": "^0.8.0",
+    "@types/jest": "^21.1.8",
+    "@types/meow": "^3.6.2",
     "execa": "^0.8.0",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
+    "ts-jest": "^21.2.3",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.1"
   }
