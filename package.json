@@ -45,9 +45,9 @@
   "homepage": "https://github.com/marionebl/svg-term-cli#readme",
   "dependencies": {
     "@marionebl/sander": "^0.6.1",
-    "bplist-parser": "^0.1.1",
     "get-stdin": "^5.0.1",
     "guess-terminal": "^1.0.0",
+    "macos-app-config": "^1.0.1",
     "meow": "^3.7.0",
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",

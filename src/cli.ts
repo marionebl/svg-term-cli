@@ -3,12 +3,12 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import {guessTerminal, GuessedTerminal} from 'guess-terminal';
+import * as macosAppConfig from 'macos-app-config';
 import * as meow from 'meow';
 import * as parsers from 'term-schemes';
 import {TermSchemes, TermScheme} from 'term-schemes';
 
 const plist = require('plist');
-const bplistParser = require('bplist-parser');
 const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
 const {render} = require('svg-term');
@@ -178,12 +178,10 @@ function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
 function getConfig(term: GuessedTerminal): any {
   switch(term) {
     case GuessedTerminal.terminal: {
-      const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.apple.terminal.plist`);
-      return bplistParser.parseBuffer(file)[0];
+      return macosAppConfig.sync(term)[0];
     }
     case GuessedTerminal.iterm2: {
-      const file = sander.readFileSync(os.homedir(), `Library/Preferences/com.googlecode.iterm2.plist`);
-      return bplistParser.parseBuffer(file)[0];
+      return macosAppConfig.sync(term)[0];
     }
     default:
       return null;
