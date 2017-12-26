@@ -52,7 +52,7 @@
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",
     "svg-term": "1.1.0",
-    "term-schemes": "^1.0.1"
+    "term-schemes": "^1.1.2"
   },
   "devDependencies": {
     "@types/execa": "^0.8.0",

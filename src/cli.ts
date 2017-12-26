@@ -289,7 +289,18 @@ function extractTheme(term: string, name: string): TermScheme | null {
     return null;
   }
 
+  if (term === GuessedTerminal.hyper) {
+    const filename = path.resolve(os.homedir(), '.hyper.js');
+    const theme = parsers.hyper(String(fs.readFileSync(filename)), {filename});
+    return theme;
+  }
+
   const presets = getPresets(term as GuessedTerminal);
+
+  if (!presets) {
+    return null;
+  } 
+
   const theme = presets[name];
   const parser = getParser(term);
 
