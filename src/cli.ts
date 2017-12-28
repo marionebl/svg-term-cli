@@ -33,17 +33,21 @@ withCli(main, `
     $ svg-term [options]
 
   Options
+    --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided
+    --cursor        display cursor, defaults to true [boolean]
+    --frame         wether to frame the result with an application window [boolean]
+    --from          lower range of timeline to render in ms [number]
+    --height        height in lines [number]
+    --help          print this help [boolean]
     --out           output file, emits to stdout if omitted
+    --padding       distance between text and image bounds
+    --padding-x     distance between text and image bounds on x axis
+    --padding-y     distance between text and image bounds on y axis
     --profile       terminal profile file to use [file], requires --term
     --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
-    --frame         wether to frame the result with an application window [boolean]
-    --width         width in columns [number]
-    --height        height in lines [number]
-    --from          lower range of timeline to render in ms [number]
     --to            upper range of timeline to render in ms [number]
-    --at            timestamp of frame to render in ms [number]
-    --help          print this help [boolean]
+    --width         width in columns [number]
 
   Examples
     $ echo rec.json | svg-term 
@@ -148,12 +152,15 @@ async function main(cli: SvgTermCli) {
 
   const svg = render(input, {
     at: toNumber(cli.flags.at),
+    cursor: toBoolean(cli.flags.cursor, true), 
     from: toNumber(cli.flags.from),
+    paddingX: toNumber(cli.flags.paddingX || cli.flags.padding),
+    paddingY: toNumber(cli.flags.paddingY || cli.flags.padding),
     to: toNumber(cli.flags.to),
     height: toNumber(cli.flags.height),
     theme,
     width: toNumber(cli.flags.width),
-    window: Boolean(cli.flags.frame)
+    window: toBoolean(cli.flags.frame, false)
   });
 
   if (typeof cli.flags.out === 'string') {
@@ -328,6 +335,19 @@ function toNumber(input: string | null): number | null {
     return null;
   }
   return candidate;
+}
+
+function toBoolean(input: any, fb: boolean): boolean {
+  if (typeof input === 'undefined') {
+    return fb;
+  }
+  if (input === 'false') {
+    return false;
+  }
+  if (input === 'true') {
+    return true;
+  }
+  return input === true;
 }
 
 function withCli(fn: (cli: SvgTermCli) => Promise<void>, help: string = ''): Promise<void> {
