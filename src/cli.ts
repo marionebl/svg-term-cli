@@ -13,6 +13,7 @@ const fetch = require('node-fetch');
 const getStdin = require('get-stdin');
 const {render} = require('svg-term');
 const sander = require('@marionebl/sander');
+const SVGO = require('svgo');
 
 interface Guesses {
   [key: string]: string | null;
@@ -40,6 +41,7 @@ withCli(main, `
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
+    --optimize      optimize svg output via svgo, defaults to true [boolean]
     --out           output file, emits to stdout if omitted
     --padding       distance between text and image bounds
     --padding-x     distance between text and image bounds on x axis
@@ -163,10 +165,18 @@ async function main(cli: SvgTermCli) {
     window: toBoolean(cli.flags.frame, false)
   });
 
+  const svgo = new SVGO({
+    plugins: [
+      {collapseGroups: false}
+    ]
+  });
+
+  const optimized = toBoolean(cli.flags.optimize, true) ? await svgo.optimize(svg) : svg;
+
   if (typeof cli.flags.out === 'string') {
-    sander.writeFile(cli.flags.out, Buffer.from(svg));
+    sander.writeFile(cli.flags.out, Buffer.from(optimized.data));
   } else {
-    process.stdout.write(svg);
+    process.stdout.write(optimized);
   }
 }
 

@@ -52,12 +52,14 @@
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",
     "svg-term": "1.1.0",
+    "svgo": "^1.0.3",
     "term-schemes": "^1.1.2"
   },
   "devDependencies": {
     "@types/execa": "^0.8.0",
     "@types/jest": "^21.1.8",
     "@types/meow": "^3.6.2",
+    "@types/svgo": "^0.7.0",
     "execa": "^0.8.0",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
