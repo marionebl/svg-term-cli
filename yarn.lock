@@ -3055,9 +3055,9 @@ supports-color@^4.0.0:
   dependencies:
     has-flag "^2.0.0"
 
-svg-term@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/svg-term/-/svg-term-1.1.0.tgz#d437cd235fa88a9fd5c9209cce3fe01b65aec71a"
+svg-term@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/svg-term/-/svg-term-1.1.3.tgz#60d2c83f1b883acdf9b4e0b333da1104f3229964"
   dependencies:
     "@stiligita/constants" "^1.0.0-0"
     "@stiligita/core" "^1.0.0-0"
