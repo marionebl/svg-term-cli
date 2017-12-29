@@ -36,12 +36,12 @@ withCli(main, `
   Options
     --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided
-    --cursor        display cursor, defaults to true [boolean]
     --frame         wether to frame the result with an application window [boolean]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
-    --optimize      optimize svg output via svgo, defaults to true [boolean]
+    --no-cursor     disable cursor rendering [boolean]
+    --no-optimize   disable svgo optimization [boolean]
     --out           output file, emits to stdout if omitted
     --padding       distance between text and image bounds
     --padding-x     distance between text and image bounds on x axis

@@ -35,17 +35,22 @@ Usage
     $ svg-term [options]
 
   Options
+    --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided
-    --out           output file, emits to stdout if omitted
-    --profile       terminal profile file to use [file], requires --term
-    --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
     --frame         wether to frame the result with an application window [boolean]
     --from          lower range of timeline to render in ms [number]
-    --to            upper range of timeline to render in ms [number]
-    --at            timestamp of frame to render in ms [number]
-    --width         width in columns [number]
     --height        height in lines [number]
     --help          print this help [boolean]
+    --no-cursor     disable cursor rendering [boolean]
+    --no-optimize   disable svgo optimization [boolean]
+    --out           output file, emits to stdout if omitted
+    --padding       distance between text and image bounds
+    --padding-x     distance between text and image bounds on x axis
+    --padding-y     distance between text and image bounds on y axis
+    --profile       terminal profile file to use [file], requires --term
+    --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
+    --to            upper range of timeline to render in ms [number]
+    --width         width in columns [number]
 
   Examples
     $ echo rec.json | svg-term
