@@ -1,6 +1,6 @@
 {
   "name": "svg-term-cli",
-  "version": "2.0.3",
+  "version": "2.1.0-0",
   "description": "Share terminal sessions as razor-sharp animated SVG everywhere",
   "bin": {
     "svg-term": "./lib/cli.js"
@@ -56,6 +56,7 @@
     "plist": "^2.1.0",
     "svg-term": "^1.1.3",
     "svgo": "^1.0.3",
+    "tempfile": "^2.0.0",
     "term-schemes": "^1.1.2"
   },
   "devDependencies": {
@@ -64,6 +65,7 @@
     "@types/jest": "^21.1.8",
     "@types/meow": "^3.6.2",
     "@types/svgo": "^0.7.0",
+    "@types/tempfile": "^2.0.0",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
     "prettier": "^1.9.2",

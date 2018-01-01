@@ -176,6 +176,10 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@types/svgo/-/svgo-0.7.0.tgz#7e6b1be803a2826891bb5ede6e6518c428bbff8e"
 
+"@types/tempfile@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@types/tempfile/-/tempfile-2.0.0.tgz#90dbc3f634a02355ac91562e36b9a1ffd1b83bd1"
+
 abab@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/abab/-/abab-1.0.4.tgz#5faad9c2c07f60dd76770f71cf025b62a63cfd4e"
@@ -3152,6 +3156,17 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+temp-dir@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/temp-dir/-/temp-dir-1.0.0.tgz#0a7c0ea26d3a39afa7e0ebea9c1fc0bc4daa011d"
+
+tempfile@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tempfile/-/tempfile-2.0.0.tgz#6b0446856a9b1114d1856ffcbe509cccb0977265"
+  dependencies:
+    temp-dir "^1.0.0"
+    uuid "^3.0.1"
+
 term-schemes@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/term-schemes/-/term-schemes-1.1.2.tgz#f66c40a6cbc2cff78bdac9026e5ece7f735277d4"
@@ -3372,7 +3387,7 @@ util.promisify@~1.0.0:
     define-properties "^1.1.2"
     object.getownpropertydescriptors "^2.0.3"
 
-uuid@^3.0.0, uuid@^3.1.0:
+uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.1.0.tgz#3dd3d3e790abc24d7b0d3a034ffababe28ebbc04"
 
