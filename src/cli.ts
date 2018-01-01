@@ -59,7 +59,7 @@ withCli(
     $ svg-term --cast 113643 
     $ svg-term --cast 113643 --out examples/parrot.svg
 `, {
-  boolean: ['cursor', 'optimize', 'window'],
+  boolean: ['cursor', 'help', 'optimize', 'version', 'window'],
   string: ['at', 'cast', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width']
 });
 
@@ -207,7 +207,7 @@ async function main(cli: SvgTermCli) {
 
   const optimized = toBoolean(cli.flags.optimize, true)
     ? await svgo.optimize(svg)
-    : svg;
+    : {data: svg};
 
   if (typeof cli.flags.out === "string") {
     sander.writeFile(cli.flags.out, Buffer.from(optimized.data));
