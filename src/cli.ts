@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as fs from "fs";
-import {red} from "chalk";
+import chalk from "chalk";
 import { GuessedTerminal, guessTerminal } from "guess-terminal";
 import * as macosAppConfig from "macos-app-config";
 import * as meow from "meow";
@@ -422,7 +422,7 @@ function withCli(
 
   if (unknown.length > 0) {
     console.log(cli.help);
-    console.log("\n", red(`svg-term: remove unknown flags ${unknown.join(', ')}`));
+    console.log("\n", chalk.red(`svg-term: remove unknown flags ${unknown.join(', ')}`));
     process.exit(1);
   }
 
@@ -430,7 +430,7 @@ function withCli(
     setTimeout(() => {
       if (typeof err.help === "function") {
         console.log(err.help());
-        console.log("\n", red(err.message));
+        console.log("\n", chalk.red(err.message));
         process.exit(1);
       }
       throw err;
