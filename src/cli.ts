@@ -3,11 +3,11 @@ import * as fs from "fs";
 import chalk from "chalk";
 import { GuessedTerminal, guessTerminal } from "guess-terminal";
 import * as macosAppConfig from "macos-app-config";
-import * as meow from "meow";
 import * as os from "os";
 import * as path from "path";
 import * as parsers from "term-schemes";
 
+const meow = require("meow");
 const plist = require("plist");
 const fetch = require("node-fetch");
 const getStdin = require("get-stdin");
@@ -37,19 +37,19 @@ withCli(
 
   Options
     --at            timestamp of frame to render in ms [number]
-    --cast          asciinema cast id to download [string], required if no stdin provided
+    --cast          asciinema cast id to download [string], required if no stdin provided [string]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
     --in            json file to use as input [string]
     --no-cursor     disable cursor rendering [boolean]
     --no-optimize   disable svgo optimization [boolean]
-    --out           output file, emits to stdout if omitted
-    --padding       distance between text and image bounds
-    --padding-x     distance between text and image bounds on x axis
-    --padding-y     distance between text and image bounds on y axis
-    --profile       terminal profile file to use [file], requires --term
-    --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
+    --out           output file, emits to stdout if omitted, [string]
+    --padding       distance between text and image bounds, [number]
+    --padding-x     distance between text and image bounds on x axis [number]
+    --padding-y     distance between text and image bounds on y axis [number]
+    --profile       terminal profile file to use, requires --term [string]
+    --term          terminal profile format [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe], requires --profile [string]
     --to            upper range of timeline to render in ms [number]
     --width         width in columns [number]
     --window        render with window decorations [boolean]
@@ -58,7 +58,10 @@ withCli(
     $ echo rec.json | svg-term 
     $ svg-term --cast 113643 
     $ svg-term --cast 113643 --out examples/parrot.svg
-`);
+`, {
+  boolean: ['cursor', 'optimize', 'window'],
+  string: ['at', 'cast', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width']
+});
 
 async function main(cli: SvgTermCli) {
   const input = await getInput(cli);
@@ -111,10 +114,14 @@ async function main(cli: SvgTermCli) {
     if (!(name in cli.flags)) {
       return null;
     }
-    if (typeof val !== "number" || isNaN(val)) {
+
+    const v = typeof(val) === "number" ? val : parseInt(val, 10);
+
+    if (isNaN(v)) {
       return new TypeError(`${name} expected to be number, received "${val}"`);
     }
-    if (name !== "at" && typeof cli.flags.at === "number") {
+  
+    if (name !== "at" && ! isNaN(parseInt(cli.flags.at, 10))) {
       return new TypeError(`--at flag disallows --${name}`);
     }
 
@@ -412,13 +419,17 @@ function toBoolean(input: any, fb: boolean): boolean {
 function withCli(
   fn: (cli: SvgTermCli) => Promise<void>,
   help: string = "",
+  options = {}
 ): void {
   const unknown: string[] = [];
-  const cli = meow(help, {unknown: (arg: string) => {
-    unknown.push(arg);
+  const cli = meow(help, {
+    ...options,
+    unknown: (arg: string) => {
+      unknown.push(arg);
 
-    return true;
-  }});
+      return false;
+    }
+  });
 
   if (unknown.length > 0) {
     console.log(cli.help);
