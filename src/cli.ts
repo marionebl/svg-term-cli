@@ -37,7 +37,6 @@ withCli(
   Options
     --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided
-    --frame         wether to frame the result with an application window [boolean]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
@@ -52,6 +51,7 @@ withCli(
     --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
     --to            upper range of timeline to render in ms [number]
     --width         width in columns [number]
+    --window        render with window decorations [boolean]
 
   Examples
     $ echo rec.json | svg-term 
@@ -191,7 +191,7 @@ async function main(cli: SvgTermCli) {
     height: toNumber(cli.flags.height),
     theme,
     width: toNumber(cli.flags.width),
-    window: toBoolean(cli.flags.frame, false)
+    window: toBoolean(cli.flags.window, false)
   });
 
   const svgo = new SVGO({
