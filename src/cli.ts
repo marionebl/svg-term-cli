@@ -41,6 +41,7 @@ withCli(
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
+    --in            json file to use as input [string]
     --no-cursor     disable cursor rendering [boolean]
     --no-optimize   disable svgo optimization [boolean]
     --out           output file, emits to stdout if omitted
@@ -64,7 +65,7 @@ async function main(cli: SvgTermCli) {
   const error = cliError(cli);
 
   if (!input) {
-    throw error(`svg-term: either stdin or --cast are required`);
+    throw error(`svg-term: either stdin, --cast or --in are required`);
   }
 
   const malformed = ensure(["height", "width"], cli.flags, (name, val) => {
@@ -280,6 +281,10 @@ function guessProfile(term: GuessedTerminal): string | null {
 }
 
 async function getInput(cli: SvgTermCli) {
+  if (cli.flags.in) {
+    return String(await sander.readFile(cli.flags.in));
+  }
+
   if (cli.flags.cast) {
     const response = await fetch(
       `https://asciinema.org/a/${cli.flags.cast}.cast?dl=true`
