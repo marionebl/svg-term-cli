@@ -60,7 +60,12 @@ withCli(
     $ svg-term --cast 113643 --out examples/parrot.svg
 `, {
   boolean: ['cursor', 'help', 'optimize', 'version', 'window'],
-  string: ['at', 'cast', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width']
+  string: ['at', 'cast', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width'],
+  default: {
+    cursor: true,
+    optimize: true,
+    window: false
+  }
 });
 
 async function main(cli: SvgTermCli) {
