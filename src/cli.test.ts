@@ -19,7 +19,7 @@ test("prints help with non-zero exit code", async () => {
   const result = await bin([], { input: "" });
   expect(result.code).not.toBe(0);
   expect(result.stdout).toContain(
-    "svg-term: either stdin, --cast or --in are required"
+    "svg-term: either stdin, --cast, --command or --in are required"
   );
 });
 
