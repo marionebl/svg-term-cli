@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
       "declaration": true,
+      "lib": ["es2015"],
       "module": "commonjs",
       "noImplicitAny": true,
-      "pretty": true,
-      "target": "es2015",
       "outDir": "lib/",
-      "lib": ["es2015"]
+      "pretty": true,
+      "strictNullChecks": true,
+      "target": "es2015"
     }
   }
   
