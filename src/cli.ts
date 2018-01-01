@@ -57,8 +57,7 @@ withCli(
     $ echo rec.json | svg-term 
     $ svg-term --cast 113643 
     $ svg-term --cast 113643 --out examples/parrot.svg
-`
-);
+`);
 
 async function main(cli: SvgTermCli) {
   const input = await getInput(cli);
@@ -411,9 +410,22 @@ function toBoolean(input: any, fb: boolean): boolean {
 
 function withCli(
   fn: (cli: SvgTermCli) => Promise<void>,
-  help: string = ""
+  help: string = "",
 ): void {
-  fn(meow(help)).catch(err => {
+  const unknown: string[] = [];
+  const cli = meow(help, {unknown: (arg: string) => {
+    unknown.push(arg);
+
+    return true;
+  }});
+
+  if (unknown.length > 0) {
+    console.log(cli.help);
+    console.log("\n", `remove unknown flags: ${unknown.join(', ')}`);
+    process.exit(1);
+  }
+
+  fn(cli).catch(err => {
     setTimeout(() => {
       if (typeof err.help === "function") {
         console.log(err.help());
