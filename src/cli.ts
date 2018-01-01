@@ -204,7 +204,7 @@ async function main(cli: SvgTermCli) {
   if (typeof cli.flags.out === "string") {
     sander.writeFile(cli.flags.out, Buffer.from(optimized.data));
   } else {
-    process.stdout.write(optimized);
+    process.stdout.write(optimized.data);
   }
 }
 
