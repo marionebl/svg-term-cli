@@ -4,7 +4,7 @@
   <img width="600" src="https://cdn.rawgit.com/marionebl/svg-term-cli/1250f9c1/examples/parrot.svg">
 </p>
 
-> Example generated with `svg-term --cast 113643 --out examples/parrot.svg --frame --no-cursor --from=4500`
+> Example generated with `svg-term --cast 113643 --out examples/parrot.svg --window --no-cursor --from=4500`
 
 # svg-term-cli
 
@@ -23,7 +23,7 @@ npm install -g svg-term-cli
 Generate the `parrot.svg` example from [asciicast](https://asciinema.org/a/113643)
 
 ```
-svg-term --cast=113643 --out examples/parrot.svg --frame
+svg-term --cast=113643 --out examples/parrot.svg --window
 ```
 
 ## Interface
@@ -31,32 +31,34 @@ svg-term --cast=113643 --out examples/parrot.svg --frame
 ```
 $ svg-term --help
 
-Usage
+  Share terminal sessions as razor-sharp animated SVG everywhere
+
+  Usage
     $ svg-term [options]
 
   Options
     --at            timestamp of frame to render in ms [number]
-    --cast          asciinema cast id to download [string], required if no stdin provided
-    --frame         wether to frame the result with an application window [boolean]
+    --cast          asciinema cast id to download [string], required if no stdin provided [string]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
+    --in            json file to use as input [string]
     --no-cursor     disable cursor rendering [boolean]
     --no-optimize   disable svgo optimization [boolean]
-    --out           output file, emits to stdout if omitted
-    --padding       distance between text and image bounds
-    --padding-x     distance between text and image bounds on x axis
-    --padding-y     distance between text and image bounds on y axis
-    --profile       terminal profile file to use [file], requires --term
-    --term          terminal profile format, requires [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe] --profile
+    --out           output file, emits to stdout if omitted, [string]
+    --padding       distance between text and image bounds, [number]
+    --padding-x     distance between text and image bounds on x axis [number]
+    --padding-y     distance between text and image bounds on y axis [number]
+    --profile       terminal profile file to use, requires --term [string]
+    --term          terminal profile format [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe], requires --profile [string]
     --to            upper range of timeline to render in ms [number]
     --width         width in columns [number]
+    --window        render with window decorations [boolean]
 
   Examples
     $ cat rec.json | svg-term
     $ svg-term --cast 113643
-    $ svg-term --cast 3 --from 4000 --to 6000 --out nyan.svg
-    $ svg-term --cast rfS1M5ynKm1hGaBqJYJj0mGCi --at 40000 --out jsvu.svg
+    $ svg-term --cast 113643 --out examples/parrot.svg
 ```
 
 ## Rationale
