@@ -137,10 +137,8 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${shadowed.map(m => m.message).join("\n")}`);
   }
 
-  const term = guessTerminal() || cli.flags.term;
-  const profile = term
-    ? guessProfile(term) || cli.flags.profile
-    : cli.flags.profile;
+  const term = 'term' in cli.flags ? cli.flags.term : guessTerminal();
+  const profile = 'profile' in cli.flags ? cli.flags.profile : guessProfile(term);
 
   const guess: Guesses = {
     term,
@@ -164,7 +162,7 @@ async function main(cli: SvgTermCli) {
       return null;
     }
 
-    if (!(cli.flags.term in parsers.TermSchemes)) {
+    if ((cli.flags.term in parsers.TermSchemes)) {
       return null;
     }
 
@@ -375,6 +373,10 @@ function extractTheme(term: string, name: string): parsers.TermScheme | null {
 
   if (!presets) {
     return null;
+  }
+
+  if (!(name in presets)) {
+    throw new Error(`profile "${name}" not found for terminal "${term}". Available: ${Object.keys(presets).join(', ')}`);
   }
 
   const theme = presets[name];
