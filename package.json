@@ -1,6 +1,6 @@
 {
   "name": "svg-term-cli",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Share terminal sessions as razor-sharp animated SVG everywhere",
   "bin": {
     "svg-term": "./lib/cli.js"
