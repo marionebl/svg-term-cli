@@ -1501,6 +1501,12 @@ iconv-lite@0.4.19, iconv-lite@~0.4.13:
   version "0.4.19"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.19.tgz#f7468f60135f5e5dad3399c0a81be9a1603a082b"
 
+import-from@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/import-from/-/import-from-2.1.0.tgz#335db7f2a7affd53aaa471d4b8021dee36b7f3b1"
+  dependencies:
+    resolve-from "^3.0.0"
+
 imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/imurmurhash/-/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
@@ -2823,6 +2829,10 @@ require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
 
+resolve-from@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/resolve-from/-/resolve-from-3.0.0.tgz#b22c7af7d9d6881bc8b6e653335eebcb0a188748"
+
 resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
@@ -3152,9 +3162,9 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
-term-schemes@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/term-schemes/-/term-schemes-1.1.2.tgz#f66c40a6cbc2cff78bdac9026e5ece7f735277d4"
+term-schemes@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/term-schemes/-/term-schemes-1.2.0.tgz#8a32bac908c7fd5aabb63ab5d54917a8c5a1514e"
   dependencies:
     "@marionebl/is" "^0.5.1-0"
     "@types/globby" "^6.1.0"
@@ -3166,10 +3176,16 @@ term-schemes@^1.1.2:
     bplist-parser "^0.1.1"
     color "^2.0.1"
     hex-rgb "^1.0.0"
+    import-from "^2.1.0"
     ini "^1.3.4"
     lodash "^4.17.4"
     plist "^2.1.0"
     require-from-string "^2.0.1"
+    terminal-default-colors "^1.0.2"
+
+terminal-default-colors@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/terminal-default-colors/-/terminal-default-colors-1.0.2.tgz#8b3bab68c1c1e741869ce11548a88ddcc5fbc1ba"
 
 test-exclude@^4.1.1:
   version "4.1.1"
