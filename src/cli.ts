@@ -148,7 +148,7 @@ async function main(cli: SvgTermCli) {
   if ("term" in cli.flags || "profile" in cli.flags) {
     const unsatisfied = ["term", "profile"].filter(n => !Boolean(guess[n]));
 
-    if (unsatisfied.length > 0) {
+    if (unsatisfied.length > 0 && term !== "hyper") {
       throw error(
         `svg-term: --term and --profile must be used together, ${unsatisfied.join(
           ", "
@@ -334,7 +334,7 @@ function getParser(term: string) {
 }
 
 function getTheme(guess: Guesses): parsers.TermScheme | null {
-  if (guess.term === null || guess.profile === null) {
+  if (guess.term === null && guess.profile === null) {
     return null;
   }
 
