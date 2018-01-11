@@ -53,7 +53,7 @@ Usage
     --width         width in columns [number]
 
   Examples
-    $ echo rec.json | svg-term
+    $ cat rec.json | svg-term
     $ svg-term --cast 113643
     $ svg-term --cast 3 --from 4000 --to 6000 --out nyan.svg
     $ svg-term --cast rfS1M5ynKm1hGaBqJYJj0mGCi --at 40000 --out jsvu.svg

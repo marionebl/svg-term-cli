@@ -55,8 +55,8 @@ withCli(
     --window        render with window decorations [boolean]
 
   Examples
-    $ echo rec.json | svg-term 
-    $ svg-term --cast 113643 
+    $ cat rec.json | svg-term
+    $ svg-term --cast 113643
     $ svg-term --cast 113643 --out examples/parrot.svg
 `, {
   boolean: ['cursor', 'help', 'optimize', 'version', 'window'],
