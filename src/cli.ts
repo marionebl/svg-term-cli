@@ -79,7 +79,7 @@ withCli(
 async function main(cli: SvgTermCli) {
   const error = cliError(cli);
 
-  if ('command' in cli.flags && !await command('asciinema')) {
+  if (cli.flags.hasOwnProperty("command") && !await command('asciinema')) {
     throw error([
       `svg-term: asciinema must be installed when --command is specified.`,
       ` See instructions at: https://asciinema.org/docs/installation`
@@ -93,7 +93,7 @@ async function main(cli: SvgTermCli) {
   }
 
   const malformed = ensure(["height", "width"], cli.flags, (name, val) => {
-    if (!(name in cli.flags)) {
+    if (!cli.flags.hasOwnProperty(name)) {
       return null;
     }
 
@@ -113,7 +113,7 @@ async function main(cli: SvgTermCli) {
     ["cast", "out", "profile"],
     cli.flags,
     (name, val) => {
-      if (!(name in cli.flags)) {
+      if (!cli.flags.hasOwnProperty(name)) {
         return null;
       }
       if (name === "cast" && typeof val === "number") {
@@ -132,7 +132,7 @@ async function main(cli: SvgTermCli) {
   }
 
   const shadowed = ensure(["at", "from", "to"], cli.flags, (name, val) => {
-    if (!(name in cli.flags)) {
+    if (!cli.flags.hasOwnProperty(name)) {
       return null;
     }
 
@@ -153,15 +153,15 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${shadowed.map(m => m.message).join("\n")}`);
   }
 
-  const term = 'term' in cli.flags ? cli.flags.term : guessTerminal();
-  const profile = 'profile' in cli.flags ? cli.flags.profile : guessProfile(term);
+  const term = cli.flags.hasOwnProperty('term') ? cli.flags.term : guessTerminal();
+  const profile = cli.flags.hasOwnProperty('profile') ? cli.flags.profile : guessProfile(term);
 
   const guess: Guesses = {
     term,
     profile
   };
 
-  if ("term" in cli.flags || "profile" in cli.flags) {
+  if (cli.flags.hasOwnProperty("term") || cli.flags.hasOwnProperty("profile")) {
     const unsatisfied = ["term", "profile"].filter(n => !Boolean(guess[n]));
 
     if (unsatisfied.length > 0 && term !== "hyper") {
@@ -174,11 +174,11 @@ async function main(cli: SvgTermCli) {
   }
 
   const unknown = ensure(["term"], cli.flags, (name, val) => {
-    if (!(name in cli.flags)) {
+    if (!cli.flags.hasOwnProperty(name)) {
       return null;
     }
 
-    if ((cli.flags.term in parsers.TermSchemes)) {
+    if (parsers.TermSchemes.hasOwnProperty(cli.flags.term)) {
       return null;
     }
 
@@ -196,7 +196,7 @@ async function main(cli: SvgTermCli) {
   const p = guess.profile || "";
   const isFileProfile = ["~", "/", "."].indexOf(p.charAt(0)) > -1;
 
-  if (isFileProfile && "profile" in cli.flags) {
+  if (isFileProfile && "profile" in cli.flags.has) {
     const missing = !await fileExists(cli.flags.profile);
     if (missing) {
       throw error(
@@ -391,7 +391,7 @@ function parseTheme(term: string, input: string): parsers.TermScheme {
 }
 
 function extractTheme(term: string, name: string): parsers.TermScheme | null {
-  if (!(term in GuessedTerminal)) {
+  if (!GuessedTerminal.hasOwnProperty(term)) {
     return null;
   }
 
@@ -413,7 +413,7 @@ function extractTheme(term: string, name: string): parsers.TermScheme | null {
     return null;
   }
 
-  if (!(name in presets)) {
+  if (!presets.hasOwnProperty(name)) {
     throw new Error(`profile "${name}" not found for terminal "${term}". Available: ${Object.keys(presets).join(', ')}`);
   }
 
