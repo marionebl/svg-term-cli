@@ -6,9 +6,10 @@ import { GuessedTerminal, guessTerminal } from "guess-terminal";
 import * as macosAppConfig from "macos-app-config";
 import * as os from "os";
 import * as path from "path";
-import * as tempfile from "tempfile";
+import * as tempy from "tempy";
 import * as parsers from "term-schemes";
 
+const commandExists = require("command-exists");
 const meow = require("meow");
 const plist = require("plist");
 const fetch = require("node-fetch");
@@ -76,8 +77,16 @@ withCli(
 });
 
 async function main(cli: SvgTermCli) {
-  const input = await getInput(cli);
   const error = cliError(cli);
+
+  if ('command' in cli.flags && !await command('asciinema')) {
+    throw error([
+      `svg-term: asciinema must be installed when --command is specified.`,
+      ` See instructions at: https://asciinema.org/docs/installation`
+    ].join('\n'));
+  }
+
+  const input = await getInput(cli);
 
   if (!input) {
     throw error(`svg-term: either stdin, --cast, --command or --in are required`);
@@ -223,6 +232,14 @@ async function main(cli: SvgTermCli) {
     sander.writeFile(cli.flags.out, Buffer.from(optimized.data));
   } else {
     process.stdout.write(optimized.data);
+  }
+}
+
+async function command(name: string): Promise<boolean> {
+  try {
+    return (await commandExists(name)) === name;
+  } catch (err) { // tslint:disable-line no-unused
+    return false;
   }
 }
 
@@ -409,7 +426,7 @@ function extractTheme(term: string, name: string): parsers.TermScheme | null {
 }
 
 async function record(cmd: string, options: RecordOptions = {}): Promise<string> {
-  const tmp = tempfile('.json');
+  const tmp = tempy.file({ extension: '.json' });
   
   const result = await execa('asciinema', [
     'rec',
@@ -473,6 +490,7 @@ function withCli(
   }
 
   fn(cli).catch(err => {
+    console.log({err});
     setTimeout(() => {
       if (typeof err.help === "function") {
         console.log(err.help());
