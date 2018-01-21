@@ -197,7 +197,7 @@ async function main(cli: SvgTermCli) {
   const isFileProfile = ["~", "/", "."].indexOf(p.charAt(0)) > -1;
 
   if (isFileProfile && "profile" in cli.flags) {
-    const missing = !fs.existsSync(path.join(process.cwd(), cli.flags.profile));
+    const missing = !await fileExists(cli.flags.profile);
     if (missing) {
       throw error(
         `svg-term: ${cli.flags.profile} must be readable file but was not found`
@@ -252,6 +252,16 @@ function ensure(
     .map(name => predicate(name, flags[name]))
     .filter(e => e instanceof Error)
     .map(e => e as Error);
+}
+
+async function fileExists(...args: string[]): Promise<boolean> {
+  try {
+    await sander.open(...args, 'r');
+
+    return true;
+  } catch (err) { // tslint:disable-line no-unused
+    return false;
+  }
 }
 
 function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
