@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 import * as fs from "fs";
 import chalk from "chalk";
+import * as execa from "execa";
 import { GuessedTerminal, guessTerminal } from "guess-terminal";
 import * as macosAppConfig from "macos-app-config";
 import * as os from "os";
 import * as path from "path";
+import * as tempy from "tempy";
 import * as parsers from "term-schemes";
 
+const commandExists = require("command-exists");
 const meow = require("meow");
 const plist = require("plist");
 const fetch = require("node-fetch");
@@ -29,6 +32,10 @@ interface SvgTermError extends Error {
   help(): string;
 }
 
+interface RecordOptions {
+  title?: string;
+}
+
 withCli(
   main,
   `
@@ -38,6 +45,7 @@ withCli(
   Options
     --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided [string]
+    --command       command to record [string]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
@@ -60,7 +68,7 @@ withCli(
     $ svg-term --cast 113643 --out examples/parrot.svg
 `, {
   boolean: ['cursor', 'help', 'optimize', 'version', 'window'],
-  string: ['at', 'cast', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width'],
+  string: ['at', 'cast', 'command', 'from', 'height', 'in', 'out', 'padding', 'padding-x', 'padding-y', 'profile', 'term', 'to', 'width'],
   default: {
     cursor: true,
     optimize: true,
@@ -69,11 +77,19 @@ withCli(
 });
 
 async function main(cli: SvgTermCli) {
-  const input = await getInput(cli);
   const error = cliError(cli);
 
+  if ('command' in cli.flags && !await command('asciinema')) {
+    throw error([
+      `svg-term: asciinema must be installed when --command is specified.`,
+      ` See instructions at: https://asciinema.org/docs/installation`
+    ].join('\n'));
+  }
+
+  const input = await getInput(cli);
+
   if (!input) {
-    throw error(`svg-term: either stdin, --cast or --in are required`);
+    throw error(`svg-term: either stdin, --cast, --command or --in are required`);
   }
 
   const malformed = ensure(["height", "width"], cli.flags, (name, val) => {
@@ -219,6 +235,14 @@ async function main(cli: SvgTermCli) {
   }
 }
 
+async function command(name: string): Promise<boolean> {
+  try {
+    return (await commandExists(name)) === name;
+  } catch (err) { // tslint:disable-line no-unused
+    return false;
+  }
+}
+
 function ensure(
   names: string[],
   flags: SvgTermCli["flags"],
@@ -291,6 +315,10 @@ function guessProfile(term: GuessedTerminal): string | null {
 }
 
 async function getInput(cli: SvgTermCli) {
+  if (cli.flags.command) {
+    return record(cli.flags.command);
+  }
+
   if (cli.flags.in) {
     return String(await sander.readFile(cli.flags.in));
   }
@@ -397,6 +425,23 @@ function extractTheme(term: string, name: string): parsers.TermScheme | null {
   }
 }
 
+async function record(cmd: string, options: RecordOptions = {}): Promise<string> {
+  const tmp = tempy.file({ extension: '.json' });
+  
+  const result = await execa('asciinema', [
+    'rec',
+    '-c', cmd,
+    ...(options.title ? ['-t', options.title] : []),
+    tmp
+  ]);
+
+  if (result.code > 0) {
+    throw new Error(`recording "${cmd}" failed\n${result.stdout}\n${result.stderr}`);
+  }
+
+  return String(await sander.readFile(tmp));
+}
+
 function toNumber(input: string | null): number | null {
   if (!input) {
     return null;
@@ -445,6 +490,7 @@ function withCli(
   }
 
   fn(cli).catch(err => {
+    console.log({err});
     setTimeout(() => {
       if (typeof err.help === "function") {
         console.log(err.help());
