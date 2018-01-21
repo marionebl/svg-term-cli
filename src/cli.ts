@@ -196,7 +196,7 @@ async function main(cli: SvgTermCli) {
   const p = guess.profile || "";
   const isFileProfile = ["~", "/", "."].indexOf(p.charAt(0)) > -1;
 
-  if (isFileProfile && "profile" in cli.flags.has) {
+  if (isFileProfile && cli.flags.hasOwnProperty("profile")) {
     const missing = !await fileExists(cli.flags.profile);
     if (missing) {
       throw error(
