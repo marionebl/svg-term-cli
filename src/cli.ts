@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import * as fs from "fs";
 import chalk from "chalk";
 import * as execa from "execa";
 import { GuessedTerminal, guessTerminal } from "guess-terminal";
@@ -218,19 +217,11 @@ async function main(cli: SvgTermCli) {
     throw error(`svg-term: ${unknown.map(m => m.message).join("\n")}`);
   }
 
-  const p = guess.profile || "";
-  const isFileProfile = ["~", "/", "."].indexOf(p.charAt(0)) > -1;
+  const [err, theme] = await getTheme(guess);
 
-  if (isFileProfile && cli.flags.hasOwnProperty("profile")) {
-    const missing = !await fileExists(cli.flags.profile);
-    if (missing) {
-      throw error(
-        `svg-term: ${cli.flags.profile} must be readable file but was not found`
-      );
-    }
+  if (err) {
+    throw error(`svg-term: ${err.message}`);
   }
-
-  const theme = getTheme(guess);
 
   const svg = render(input, {
     at: toNumber(cli.flags.at),
@@ -277,16 +268,6 @@ function ensure(
     .map(name => predicate(name, flags[name]))
     .filter(e => e instanceof Error)
     .map(e => e as Error);
-}
-
-async function fileExists(...args: string[]): Promise<boolean> {
-  try {
-    await sander.open(...args, "r");
-
-    return true;
-  } catch (err) { // tslint:disable-line no-unused
-    return false;
-  }
 }
 
 function cliError(cli: SvgTermCli): (message: string) => SvgTermError {
@@ -396,9 +377,11 @@ function getParser(term: string) {
   }
 }
 
-function getTheme(guess: Guesses): parsers.TermScheme | null {
+type Result<T> = [Error, null] | [null, T];
+
+async function getTheme(guess: Guesses): Promise<Result<parsers.TermScheme | null>> {
   if (guess.term === null && guess.profile === null) {
-    return null;
+    return [null, null];
   }
 
   const p = guess.profile || "";
@@ -409,58 +392,71 @@ function getTheme(guess: Guesses): parsers.TermScheme | null {
     : extractTheme(guess.term as string, guess.profile as string);
 }
 
-function parseTheme(term: string, input: string): parsers.TermScheme {
-  const parser = getParser(term);
+async function parseTheme(term: string, input: string): Promise<Result<parsers.TermScheme>> {
+  try {
+    const parser = getParser(term);
+    const content = String(await sander.readFile(input));
 
-  return parser(String(fs.readFileSync(input)));
+    return [null, parser(content)];
+  } catch (err) {
+    return [err, null];
+  }
 }
 
-function extractTheme(term: string, name: string): parsers.TermScheme | null {
+async function extractTheme(term: string, name: string): Promise<Result<parsers.TermScheme | null>> {
   if (!GuessedTerminal.hasOwnProperty(term)) {
-    return null;
+    return [null, null];
   }
 
   if (os.platform() !== "darwin") {
-    return null;
+    return [null, null];
   }
 
   if (term === GuessedTerminal.hyper) {
-    const filename = path.resolve(os.homedir(), ".hyper.js");
+    try {
+      const filename = path.resolve(os.homedir(), ".hyper.js");
+      const content = String(await sander.readFile(filename));
+      const result = parsers.hyper(content, {filename});
 
-    return parsers.hyper(String(fs.readFileSync(filename)), {
-      filename
-    });
+      return [null, result];
+    } catch (err) {
+      return [err, null]; 
+    }
   }
 
   const presets = getPresets(term as GuessedTerminal);
 
   if (!presets) {
-    return null;
+    return [null, null];
   }
 
   if (!presets.hasOwnProperty(name)) {
-    throw new Error(
+    const err = new Error(
       `profile "${name}" not found for terminal "${term}". Available: ${Object.keys(
         presets
       ).join(", ")}`
     );
+
+    return [err, null];
   }
 
   const theme = presets[name];
   const parser = getParser(term);
 
   if (!theme) {
-    return null;
+    return [null, null];
   }
 
   switch (term) {
-    case GuessedTerminal.iterm2: {
-      return parser(plist.build(theme));
-    }
+    case GuessedTerminal.iterm2:
     case GuessedTerminal.terminal:
-      return parser(plist.build(theme));
+      try {
+        return [null, parser(plist.build(theme))];
+      } catch (err) {
+        return [err, null];
+      }
     default:
-      return null;
+      return [null, null];
   }
 }
 
