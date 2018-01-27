@@ -525,22 +525,25 @@ function withCli(
   });
 
   if (unknown.length > 0) {
-    console.log(cli.help);
-    console.log(
-      "\n",
-      chalk.red(`svg-term: remove unknown flags ${unknown.join(", ")}`)
-    );
+    const msg = chalk.red(`svg-term: remove unknown flags ${unknown.join(", ")}`);
+
+    console.error("\n", msg);
+    console.error(cli.help);
+    console.error("\n", msg);
     process.exit(1);
   }
 
   fn(cli).catch(err => {
-    console.log({ err });
+    const msg = chalk.red(err.message);
+
+    if (typeof err.help === "function") {
+      console.error("\n", msg);
+      console.error(err.help());
+      console.error("\n", msg);
+      process.exit(1);
+    }
+
     setTimeout(() => {
-      if (typeof err.help === "function") {
-        console.log(err.help());
-        console.log("\n", chalk.red(err.message));
-        process.exit(1);
-      }
       throw err;
     }, 0);
   });
