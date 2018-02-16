@@ -76,7 +76,7 @@ test("emits error on stderr for faulty stdin input", async () => {
   expect(result.stderr).toContain("only asciicast v1 and v2 formats can be opened");
 });
 
-test("is silent on stdin for faulty stdin input", async () => {
+test("is silent on stdout for faulty stdin input", async () => {
   const result = await bin([], {
     input: '{}'
   });
