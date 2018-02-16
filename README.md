@@ -30,7 +30,7 @@ svg-term --cast=113643 --out examples/parrot.svg --window
 ## Interface
 
 ```
-$ svg-term --help
+λ svg-term --help
 
   Share terminal sessions as razor-sharp animated SVG everywhere
 
@@ -40,6 +40,7 @@ $ svg-term --help
   Options
     --at            timestamp of frame to render in ms [number]
     --cast          asciinema cast id to download [string], required if no stdin provided [string]
+    --command       command to record [string]
     --from          lower range of timeline to render in ms [number]
     --height        height in lines [number]
     --help          print this help [boolean]
