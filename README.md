@@ -14,14 +14,15 @@
 
 ## Install
 
-```sh
-# Install asciinema via: https://asciinema.org/docs/installation
-npm install -g svg-term-cli
-```
+1. Install asciinema via: https://asciinema.org/docs/installation
+2. Install svg-term-cli:
+      ```sh
+      npm install -g svg-term-cli
+      ```
 
 ## Usage
 
-Generate the `parrot.svg` example from [asciicast](https://asciinema.org/a/113643)
+Generate the `parrot.svg` example from asciicast at <https://asciinema.org/a/113643>
 
 ```
 svg-term --cast=113643 --out examples/parrot.svg --window
