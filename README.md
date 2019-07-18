@@ -28,6 +28,18 @@ Generate the `parrot.svg` example from asciicast at <https://asciinema.org/a/113
 svg-term --cast=113643 --out examples/parrot.svg --window
 ```
 
+### Docker
+
+Skip the node installation running with docker:
+
+```sh
+docker run --rm marionebl/svg-term --cast=113643 --window >> examples/parrot.svg
+# Run with --interactive(-i) to keep STDIN open
+cat rec.json | docker run --rm -i marionebl/svg-term >> examples/parrot.svg
+# Map volumes to have a better log if any error
+docker run --rm -v $PWD:/data marionebl/svg-term --cast=113643 --out /data/parrot.svg --window
+```
+
 ## Interface
 
 ```
