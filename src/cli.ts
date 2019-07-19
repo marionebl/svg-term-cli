@@ -56,6 +56,7 @@ withCli(
     --padding-x     distance between text and image bounds on x axis [number]
     --padding-y     distance between text and image bounds on y axis [number]
     --profile       terminal profile file to use, requires --term [string]
+    --speed         speed multiplier, above 1 speeds up animation [number, default=1]
     --term          terminal profile format [iterm2, xrdb, xresources, terminator, konsole, terminal, remmina, termite, tilda, xcfe], requires --profile [string]
     --to            upper range of timeline to render in ms [number]
     --width         width in columns [number]
@@ -87,6 +88,7 @@ withCli(
     default: {
       cursor: true,
       optimize: true,
+      speed: 1,
       window: false
     }
   }
@@ -420,7 +422,7 @@ async function extractTheme(term: string, name: string): Promise<Result<parsers.
 
       return [null, result];
     } catch (err) {
-      return [err, null]; 
+      return [err, null];
     }
   }
 
