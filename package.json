@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "postbuild": "chmod +x ./lib/cli.js",
     "format": "prettier src/**/*.ts --write && tslint --project . --fix",
     "test": "jest"
   },
