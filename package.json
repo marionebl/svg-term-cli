@@ -46,7 +46,7 @@
   "homepage": "https://github.com/marionebl/svg-term-cli#readme",
   "dependencies": {
     "@marionebl/sander": "^0.6.1",
-    "chalk": "^2.3.0",
+    "chalk": "2.x",
     "command-exists": "^1.2.2",
     "execa": "^0.8.0",
     "get-stdin": "^5.0.1",
@@ -56,7 +56,7 @@
     "node-fetch": "^1.7.3",
     "plist": "^2.1.0",
     "svg-term": "^1.1.3",
-    "svgo": "^1.0.3",
+    "svgo": "1.3.0",
     "tempfile": "^2.0.0",
     "tempy": "^0.2.1",
     "term-schemes": "^1.2.0"
@@ -79,5 +79,6 @@
     "tslint-xo": "^0.4.0",
     "typescript": "^2.6.1",
     "xmldom": "^0.1.27"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
