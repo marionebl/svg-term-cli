@@ -79,5 +79,6 @@
     "tslint-xo": "^0.4.0",
     "typescript": "^2.6.1",
     "xmldom": "^0.1.27"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }
